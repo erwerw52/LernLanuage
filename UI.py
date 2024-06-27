@@ -22,9 +22,9 @@ _ = gettext.gettext
 class LernEnglish ( wx.Frame ):
    
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Lerning English"), pos = wx.DefaultPosition, size = wx.Size( 300,200 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Lern Language"), pos = wx.DefaultPosition, size = wx.Size( 300,230 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
-        self.SetSizeHints( wx.Size( 300,200 ), wx.Size( 300,200 ) )
+        self.SetSizeHints( wx.Size( 300,230 ), wx.Size( 300,230 ) )
         self.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_BTNFACE ) )
 
         value = read.readRandomDict(0)
