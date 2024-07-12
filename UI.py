@@ -10,19 +10,21 @@
 import wx
 import wx.xrc
 import read
+import UI
+import ListView
 import pyttsx3
 
 import gettext
 _ = gettext.gettext
 
 ###########################################################################
-## Class MyFrame2
+## Class LernEnglish
 ###########################################################################
 
-class LernEnglish ( wx.Frame ):
+class LernLanuage ( wx.Frame ):
    
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = 'Lerning Language', pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
         self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
         self.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_BTNFACE ) )
@@ -35,14 +37,14 @@ class LernEnglish ( wx.Frame ):
         keys = list(value.keys())
         values = list(value.values())
          
-        start = value['start']
-        end = value['end']
+        current = value['current']
+        size = value['size']
 
-        cbDaysChoices = [ _(u"Day1"), _(u"Day2"), _(u"Day3"), _(u"Day4"), _(u"Day5") ]
+        cbDaysChoices = value['sheets_no']
         self.cbDays = wx.ComboBox( self, wx.ID_ANY, _(u"Day1"), wx.DefaultPosition, wx.DefaultSize, cbDaysChoices, 0 )
         hTitle.Add( self.cbDays, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 
-        self.labSize = wx.StaticText( self, wx.ID_ANY, _(start + "/" + end), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.labSize = wx.StaticText( self, wx.ID_ANY, _(current + "/" + size), wx.DefaultPosition, wx.DefaultSize, 0 )
         self.labSize.Wrap( -1 )
 
         hTitle.Add( self.labSize, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
@@ -68,8 +70,11 @@ class LernEnglish ( wx.Frame ):
         self.btnSpeak = wx.Button( self, wx.ID_ANY, _(u"SPEAK"), wx.DefaultPosition, wx.DefaultSize, 0 )
         hContainer.Add( self.btnSpeak, 0, wx.ALL, 5 )
 
-        self.btnNext = wx.Button( self, wx.ID_ANY, _(u"NEXT"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.btnNext = wx.Button( self, wx.ID_ANY, _(u"RANDOM"), wx.DefaultPosition, wx.DefaultSize, 0 )
         hContainer.Add( self.btnNext, 0, wx.ALL, 5 )
+
+        self.btnListView = wx.Button( self, wx.ID_ANY, _(u"ListView"), wx.DefaultPosition, wx.DefaultSize, 0 )
+        hContainer.Add( self.btnListView, 0, wx.ALL, 5 )
 
         vMain.Add( hContainer, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
@@ -82,7 +87,7 @@ class LernEnglish ( wx.Frame ):
 
         hTranslate.Add( self.labTranslate, 0, wx.ALL, 5 )
 
-        vMain.Add( hTranslate, 0, wx.ALIGN_RIGHT, 5 )
+        vMain.Add( hTranslate, 0, wx.ALIGN_CENTER_HORIZONTAL, 5 )
 
         self.SetSizer( vMain )
         self.Layout()
@@ -94,6 +99,7 @@ class LernEnglish ( wx.Frame ):
         self.btnHide.Bind( wx.EVT_BUTTON, self.onBtnHideClicked )
         self.btnSpeak.Bind( wx.EVT_BUTTON, self.onBtnSpeakClicked )
         self.btnNext.Bind( wx.EVT_BUTTON, self.onBtnNextClicked )
+        self.btnListView.Bind( wx.EVT_BUTTON, self.onBtnListViewClicked )
 
     def __del__( self ):
         pass
@@ -105,13 +111,13 @@ class LernEnglish ( wx.Frame ):
         
         keys = list(value.keys())
         values = list(value.values())
-        
-        start = value['start']
-        end = value['end']
-        
+         
+        current = value['current']
+        size = value['size']
+
         self.labText.SetLabelText(keys[0])
         self.labTranslate.SetLabelText(values[0] + ' ')
-        self.labSize.SetLabelText(start + "/" + end)
+        self.labSize.SetLabelText(current + "/" + size)
         
     # Virtual event handlers, override them in your derived class
     def onBtnHideClicked( self, event ):
@@ -125,9 +131,12 @@ class LernEnglish ( wx.Frame ):
     def onBtnSpeakClicked( self, event ):
         engine = pyttsx3.init()
         engine.setProperty('voice', 'com.apple.speech.synthesis.voice.Fred')
-        engine.setProperty('rate', 185)
+        engine.setProperty('rate', 200)
         engine.say(self.labText.LabelText)
         engine.runAndWait()
+
+        # engine.say(self.labTranslate.LabelText)
+        # engine.runAndWait()
 
     def onBtnNextClicked( self, event ):
         day = str(self.cbDays.Value)[3:]
@@ -136,12 +145,18 @@ class LernEnglish ( wx.Frame ):
         
         keys = list(value.keys())
         values = list(value.values())
-         
-        start = value['start']
-        end = value['end']
+        
+        current = value['current']
+        size = value['size']
         
         self.labText.SetLabelText(keys[0])
         self.labTranslate.SetLabelText(values[0] + ' ')
-        self.labSize.SetLabelText(start + "/" + end)
+        self.labSize.SetLabelText(current + "/" + size)
+
+    def onBtnListViewClicked( self, event ):
+        day = str(self.cbDays.Value)[3:]
+        day = int(day) - 1
+        dialog = ListView.ListView(None, day)
+        dialog.ShowModal()
 
 

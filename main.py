@@ -3,6 +3,6 @@ import UI
 
 if __name__ == '__main__':
     app = wx.App()
-    frm = UI.LernEnglish(None)
+    frm = UI.LernLanuage(None)
     frm.Show()
     app.MainLoop()
